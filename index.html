@@ -17,13 +17,13 @@
   </style>
 </head>
 <body>
-  <canvas id="myChart" width="400" height="250"></canvas>
+  <canvas id="myChart" width="400" height="220"></canvas>
   <br>
   <div display="inline">
   <label for="sloValue">SLO Value</label>
   <input type="range" id="sloValue" min="0.9" max="0.98" step="0.01" value="0.9" oninput="updateChart()">
   <span id="sloValueDisplay">1</span>
-  </div><br></br><div><label for="showAlarms">Show alarm triggers</label>
+  </div><div><label for="showAlarms">Show alarm triggers</label>
   <input type="checkbox" id="sloShowAlarms" onchange="updateChart()">
   </div>
   <script>
