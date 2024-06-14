@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Interactive SLO Visualization</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.0.0"></script>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      font-family: 'Inter', Arial, sans-serif
+    }
+  </style>
+</head>
+<body>
+  <canvas id="myChart" width="400" height="250"></canvas>
+  <br>
+  <div display="inline">
+  <label for="sloValue">SLO Value</label>
+  <input type="range" id="sloValue" min="0.9" max="0.98" step="0.01" value="0.9" oninput="updateChart()">
+  <span id="sloValueDisplay">1</span>
+  </div><br></br><div><label for="showAlarms">Show alarm triggers</label>
+  <input type="checkbox" id="sloShowAlarms" onchange="updateChart()">
+  </div>
+  <script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const sloValueDisplay = document.getElementById('sloValueDisplay');
+    
+    const myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00'],
+        datasets: [
+          {
+            label: 'SLI',
+            data: [0.97, 0.98, 0.97, 0.95, 0.65, 0.51, 0.55, 0.53, 0.47, 0.43, 0.45, 0.47, 0.45, 0.97, 0.98, 0.99, 0.97, 0.98, 0.97, 0.97, 0.99, 0.97, 0.98, 0.98, 0.99, 0.98, 0.96, 0.98, 0.97, 0.99, 0.97, 0.98],
+            backgroundColor: '#f2cc8f',
+            borderColor: '#3d405b',
+            borderWidth: 1
+          },
+          {
+            label: 'Error Budget',
+            data: [1, 1], // Adding more data points
+            backgroundColor: '#81b29a', // Switched colors
+            borderColor: '#3d405b',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        scales: {
+          x: {
+            stacked: true // Stack the bars horizontally
+          },
+          y: {
+            beginAtZero: true,
+            max: 1,
+            ticks: {
+              stepSize: 0.05
+            }
+          }
+        },
+        plugins: {
+          annotation: {
+            annotations: []
+          }
+        }
+      },
+      plugins: [{
+        id: 'customColors',
+        beforeDatasetDraw: function(chart) {
+          const ctx = chart.ctx;
+          const yScale = chart.scales.y;
+          const data = chart.data.datasets[1].data; // Accessing data from the second dataset
+          const chartArea = chart.chartArea;
+
+          for (let i = 0; i < data.length; i++) {
+            const yPos = yScale.getPixelForValue(data[i]); // Get y-position for each data point
+            ctx.fillStyle = '#e07a5f';
+            ctx.fillRect(chartArea.left, yPos, chartArea.right - chartArea.left, chartArea.bottom - yPos);
+            ctx.fillStyle = '#81b29a';
+            ctx.fillRect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, yPos - chartArea.top);
+          }
+        }
+      }]
+    });
+
+    function updateChart() {
+      const sloValue = parseFloat(document.getElementById('sloValue').value);
+      sloValueDisplay.innerText = sloValue.toFixed(2);
+
+      // Update the SLO bar height
+      myChart.data.datasets[1].data = Array(7).fill(sloValue); // Update all data points with the same value
+      const sloShowAlarms = document.getElementById('sloShowAlarms').checked;
+
+      // Add markers
+      const annotations = [];
+      for (let i = sloValue, j = 1; i >= 0; i -= (1 - sloValue), j++) {
+        annotations.push({
+          type: 'line',
+          mode: 'horizontal',
+          scaleID: 'y',
+          value: i.toFixed(2),
+          borderColor: '#720E07',
+          borderWidth: 1,
+          label: {
+            content: (i*100).toFixed(0) + '% (Burn rate = ' + j + ')' + (sloShowAlarms == false ? '' : j == 14 ? ' - 🚨 CRITICAL if 2% of error budget over last 1h AND 2/12% over last 5m' : j == 6 ? ' - 🚨 CRITICAL if 5% of error budget over last 6h AND 5/12% over last 30m' : j == 3 ? ' - ⚠️ WARN if 10% of error budget over last 1d AND 10/12% over last 2h' : j == 1 ? ' - ⚠️ WARN if 10% of error budget over last 3d AND 10/12% over last 6h' : ''),
+            enabled: true,
+            position: 'center'
+          }
+        });
+      }
+
+      // Update chart annotations
+      myChart.options.plugins.annotation.annotations = annotations;
+
+      myChart.update();
+    }
+
+    updateChart(); // Initial chart update
+  </script>
+</body>
+</html>
