@@ -21,7 +21,9 @@
   <br>
   <div display="inline">
   <label for="sloValue">SLO Value</label>
-  <input type="range" id="sloValue" min="0.9" max="0.98" step="0.01" value="0.9" oninput="updateChart()">
+  <input type="range" id="sloValue" min="0.8" max="0.99" step="0.01" value="0.9" oninput="updateChart()">
+  <input type="range" id="sloValueDecimal" min="0.000" max="0.009" step="0.001" value="0.000" oninput="updateChart()">
+   <input type="range" id="sloValueCents" min="0.0000" max="0.0009" step="0.0001" value="0.0000" oninput="updateChart()">
   <span id="sloValueDisplay">1</span>
   </div><div><label for="showAlarms">Show alarm triggers</label>
   <input type="checkbox" id="sloShowAlarms" onchange="updateChart()">
@@ -90,30 +92,51 @@
     });
 
     function updateChart() {
-      const sloValue = parseFloat(document.getElementById('sloValue').value);
-      sloValueDisplay.innerText = sloValue.toFixed(2);
+      const sloValueInteger = parseFloat(document.getElementById('sloValue').value);
+      const sloValueDecimal = parseFloat(document.getElementById('sloValueDecimal').value);
+      const sloValueCents = parseFloat(document.getElementById('sloValueCents').value);
+      const sloValue = sloValueInteger + sloValueDecimal + sloValueCents;
+      sloValueDisplay.innerText = (sloValue*100).toFixed(2) + '%';
 
       // Update the SLO bar height
       myChart.data.datasets[1].data = Array(7).fill(sloValue); // Update all data points with the same value
       const sloShowAlarms = document.getElementById('sloShowAlarms').checked;
 
       // Add markers
+      const stepFactor = (1/(10*(1-sloValue))).toFixed(0);
       const annotations = [];
-      for (let i = sloValue, j = 1; i >= 0; i -= (1 - sloValue), j++) {
+      for (let sli = sloValue; sli >= 0; sli -= stepFactor*(1 - sloValue)) {
+        const burnRate = (1 - sli) / (1 - sloValue);
         annotations.push({
           type: 'line',
           mode: 'horizontal',
           scaleID: 'y',
-          value: i.toFixed(2),
+          value: sli.toFixed(2),
           borderColor: '#720E07',
           borderWidth: 1,
           label: {
-            content: (i*100).toFixed(0) + '% (Burn rate = ' + j + ')' + (sloShowAlarms == false ? '' : j == 14 ? ' - 🚨 CRITICAL if 2% of error budget over last 1h AND 2/12% over last 5m' : j == 6 ? ' - 🚨 CRITICAL if 5% of error budget over last 6h AND 5/12% over last 30m' : j == 3 ? ' - ⚠️ WARN if 10% of error budget over last 1d AND 10/12% over last 2h' : j == 1 ? ' - ⚠️ WARN if 10% of error budget over last 3d AND 10/12% over last 6h' : ''),
+            content: (sli*100).toFixed(2) + '% | BR = ' + burnRate.toFixed(0) + (sloShowAlarms == false ? '' : burnRate == 1 ? ' | ⚠️ Detection time = 72.0h' : burnRate == 2 ? ' | ⚠️ Detection time = 36.0h' : burnRate <= 6 ? ' | ⚠️ Detection time = ' + (24*3/burnRate).toFixed(1) + 'h' : burnRate <= 14 ? ' | 🚨 Detection time = ' + (6*6/burnRate).toFixed(1) + 'h' : ' | 🚨 Detection time = ' + (14.4*1*60/burnRate).toFixed(1) + 'min'),
             enabled: true,
             position: 'center'
           }
         });
       }
+      
+      const sli = 0.0;
+      const burnRate = (1 - sli) / (1 - sloValue);
+        annotations.push({
+          type: 'line',
+          mode: 'horizontal',
+          scaleID: 'y',
+          value: sli.toFixed(2),
+          borderColor: '#720E07',
+          borderWidth: 1,
+          label: {
+            content: (sli*100).toFixed(2) + '% | BR = ' + burnRate.toFixed(0) + (sloShowAlarms == false ? '' : burnRate == 1 ? ' | ⚠️ Detection time = 72.0h' : burnRate == 2 ? ' | ⚠️ Detection time = 36.0h' : burnRate <= 6 ? ' | ⚠️ Detection time = ' + (24*3/burnRate).toFixed(1) + 'h' : burnRate <= 14 ? ' | 🚨 Detection time = ' + (6*6/burnRate).toFixed(1) + 'h' : ' | 🚨 Detection time = ' + (14.4*1*60/burnRate).toFixed(1) + 'min'),
+            enabled: true,
+            position: 'center'
+          }
+        });
 
       // Update chart annotations
       myChart.options.plugins.annotation.annotations = annotations;
