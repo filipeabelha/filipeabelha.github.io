@@ -25,7 +25,7 @@
   <input type="range" id="sloValueDecimal" min="0.000" max="0.009" step="0.001" value="0.000" oninput="updateChart()">
    <input type="range" id="sloValueCents" min="0.0000" max="0.0009" step="0.0001" value="0.0000" oninput="updateChart()">
   <span id="sloValueDisplay">1</span>
-  </div><div><label for="showAlarms">Show alarm triggers</label>
+  </div><div><label for="showAlarms">Show detection time (DT) for different consumed error budgets (EB)</label>
   <input type="checkbox" id="sloShowAlarms" onchange="updateChart()">
   </div>
   <script>
@@ -115,7 +115,7 @@
           borderColor: '#720E07',
           borderWidth: 1,
           label: {
-            content: (sli*100).toFixed(2) + '% | BR = ' + burnRate.toFixed(0) + (sloShowAlarms == false ? '' : burnRate == 1 ? ' | ⚠️ Detection time = 72.0h' : burnRate == 2 ? ' | ⚠️ Detection time = 36.0h' : burnRate <= 6 ? ' | ⚠️ Detection time = ' + (24*3/burnRate).toFixed(1) + 'h' : burnRate <= 14 ? ' | 🚨 Detection time = ' + (6*6/burnRate).toFixed(1) + 'h' : ' | 🚨 Detection time = ' + (14.4*1*60/burnRate).toFixed(1) + 'min'),
+            content: (sli*100).toFixed(2) + '% | BR = ' + burnRate.toFixed(0) + (sloShowAlarms == false ? '' : burnRate == 1 ? ' | ⚠️ DT for 10% of consumed EB = 72.0h' : burnRate == 2 ? ' | ⚠️ DT for 10% of consumed EB = 36.0h' : burnRate <= 6 ? ' | ⚠️ DT for 10% of consumed EB = ' + (24*3/burnRate).toFixed(1) + 'h' : burnRate <= 14 ? ' | 🚨 DT for 5% of consumed EB = ' + (6*6/burnRate).toFixed(1) + 'h' : ' | 🚨 DT for 2% of consumed EB = ' + (14.4*1*60/burnRate).toFixed(1) + 'min'),
             enabled: true,
             position: 'center'
           }
@@ -132,7 +132,7 @@
           borderColor: '#720E07',
           borderWidth: 1,
           label: {
-            content: (sli*100).toFixed(2) + '% | BR = ' + burnRate.toFixed(0) + (sloShowAlarms == false ? '' : burnRate == 1 ? ' | ⚠️ Detection time = 72.0h' : burnRate == 2 ? ' | ⚠️ Detection time = 36.0h' : burnRate <= 6 ? ' | ⚠️ Detection time = ' + (24*3/burnRate).toFixed(1) + 'h' : burnRate <= 14 ? ' | 🚨 Detection time = ' + (6*6/burnRate).toFixed(1) + 'h' : ' | 🚨 Detection time = ' + (14.4*1*60/burnRate).toFixed(1) + 'min'),
+            content: (sli*100).toFixed(2) + '% | BR = ' + burnRate.toFixed(0) + (sloShowAlarms == false ? '' : burnRate == 1 ? ' | ⚠️ DT for 10% of consumed EB = 72.0h' : burnRate == 2 ? ' | ⚠️ DT for 10% of consumed EB = 36.0h' : burnRate <= 6 ? ' | ⚠️ DT for 10% of consumed EB = ' + (24*3/burnRate).toFixed(1) + 'h' : burnRate <= 14 ? ' | 🚨 DT for 5% of consumed EB = ' + (6*6/burnRate).toFixed(1) + 'h' : ' | 🚨 DT for 2% of consumed EB = ' + (14.4*1*60/burnRate).toFixed(1) + 'min'),
             enabled: true,
             position: 'center'
           }
