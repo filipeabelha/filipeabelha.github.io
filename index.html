@@ -115,7 +115,7 @@
           borderColor: '#720E07',
           borderWidth: 1,
           label: {
-            content: (sli*100).toFixed(2) + '% | BR = ' + burnRate.toFixed(0) + (sloShowAlarms == false ? '' : burnRate == 1 ? ' | ⚠️ DT for 10% of consumed EB = 72.0h' : burnRate == 2 ? ' | ⚠️ DT for 10% of consumed EB = 36.0h' : burnRate <= 6 ? ' | ⚠️ DT for 10% of consumed EB = ' + (24*3/burnRate).toFixed(1) + 'h' : burnRate <= 14 ? ' | 🚨 DT for 5% of consumed EB = ' + (6*6/burnRate).toFixed(1) + 'h' : ' | 🚨 DT for 2% of consumed EB = ' + (14.4*1*60/burnRate).toFixed(1) + 'min'),
+            content: 'when SLI = ' + (sli*100).toFixed(2) + '% then BR = ' + burnRate.toFixed(0) + (sloShowAlarms == false ? '' : burnRate == 1 ? ' | ⚠️ DT for 10% of consumed EB = 72.0h' : burnRate == 2 ? ' | ⚠️ DT for 10% of consumed EB = 36.0h' : burnRate <= 6 ? ' | ⚠️ DT for 10% of consumed EB = ' + (24*3/burnRate).toFixed(1) + 'h' : burnRate <= 14 ? ' | 🚨 DT for 5% of consumed EB = ' + (6*6/burnRate).toFixed(1) + 'h' : ' | 🚨 DT for 2% of consumed EB = ' + (14.4*1*60/burnRate).toFixed(1) + 'min'),
             enabled: true,
             position: 'center'
           }
@@ -132,7 +132,7 @@
           borderColor: '#720E07',
           borderWidth: 1,
           label: {
-            content: (sli*100).toFixed(2) + '% | BR = ' + burnRate.toFixed(0) + (sloShowAlarms == false ? '' : burnRate == 1 ? ' | ⚠️ DT for 10% of consumed EB = 72.0h' : burnRate == 2 ? ' | ⚠️ DT for 10% of consumed EB = 36.0h' : burnRate <= 6 ? ' | ⚠️ DT for 10% of consumed EB = ' + (24*3/burnRate).toFixed(1) + 'h' : burnRate <= 14 ? ' | 🚨 DT for 5% of consumed EB = ' + (6*6/burnRate).toFixed(1) + 'h' : ' | 🚨 DT for 2% of consumed EB = ' + (14.4*1*60/burnRate).toFixed(1) + 'min'),
+            content: 'when SLI = ' + (sli*100).toFixed(2) + '% then BR = ' + burnRate.toFixed(0) + (sloShowAlarms == false ? '' : burnRate == 1 ? ' | ⚠️ DT for 10% of consumed EB = 72.0h' : burnRate == 2 ? ' | ⚠️ DT for 10% of consumed EB = 36.0h' : burnRate <= 6 ? ' | ⚠️ DT for 10% of consumed EB = ' + (24*3/burnRate).toFixed(1) + 'h' : burnRate <= 14 ? ' | 🚨 DT for 5% of consumed EB = ' + (6*6/burnRate).toFixed(1) + 'h' : ' | 🚨 DT for 2% of consumed EB = ' + (14.4*1*60/burnRate).toFixed(1) + 'min'),
             enabled: true,
             position: 'center'
           }
