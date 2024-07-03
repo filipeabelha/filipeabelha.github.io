@@ -33,23 +33,23 @@
     const sloValueDisplay = document.getElementById('sloValueDisplay');
     
     const myChart = new Chart(ctx, {
-      type: 'bar',
+      type: 'line',
       data: {
         labels: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00'],
         datasets: [
           {
             label: 'SLI',
             data: [0.97, 0.98, 0.97, 0.95, 0.65, 0.51, 0.55, 0.53, 0.47, 0.43, 0.45, 0.47, 0.45, 0.97, 0.98, 0.99, 0.97, 0.98, 0.97, 0.97, 0.99, 0.97, 0.98, 0.98, 0.99, 0.98, 0.96, 0.98, 0.97, 0.99, 0.97, 0.98],
-            backgroundColor: '#f2cc8f',
-            borderColor: '#3d405b',
-            borderWidth: 1
+            backgroundColor: '#000000', // bar background
+            borderWidth: 2,
+            borderColor: '#000000'
           },
           {
             label: 'Error Budget',
             data: [1, 1], // Adding more data points
-            backgroundColor: '#81b29a', // Switched colors
-            borderColor: '#3d405b',
-            borderWidth: 1
+            backgroundColor: '#d6ecd2',
+            borderWidth: 1,
+            borderRadius: 5
           }
         ]
       },
@@ -82,9 +82,9 @@
 
           for (let i = 0; i < data.length; i++) {
             const yPos = yScale.getPixelForValue(data[i]); // Get y-position for each data point
-            ctx.fillStyle = '#e07a5f';
+            ctx.fillStyle = '#ffcccb'; // Red background
             ctx.fillRect(chartArea.left, yPos, chartArea.right - chartArea.left, chartArea.bottom - yPos);
-            ctx.fillStyle = '#81b29a';
+            ctx.fillStyle = '#d6ecd2'; // White background
             ctx.fillRect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, yPos - chartArea.top);
           }
         }
